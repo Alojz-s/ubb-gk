@@ -1,0 +1,152 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hierarchiczna Scena - Obiektowa</title>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        class RotatingBox {
+            constructor(x, y, scale = 1) {
+                this.x = x;
+                this.y = y;
+                this.angle = 0;
+                this.scale = scale;
+            }
+
+            update() {
+                this.angle += 0.05;
+            }
+
+            draw() {
+                const sides = 14;
+                const radius = 15 * this.scale;
+
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                ctx.fillStyle = "black";
+
+                // Rysowanie dziewięciokąta
+                ctx.beginPath();
+                for (let i = 0; i < sides; i++) {
+                    let angle = (i * 2 * Math.PI) / sides;
+                    let x = radius * Math.cos(angle);
+                    let y = radius * Math.sin(angle);
+                    if (i === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                }
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        class RotatingRectangle {
+            constructor(x, y, width, height, speed, scale = 1) {
+                this.x = x;
+                this.y = y;
+                this.width = width * scale;
+                this.height = height * scale;
+                this.angle = 0;
+                this.speed = speed;
+                this.direction = 1;
+
+                this.leftBox = new RotatingBox(-this.width / 2, 0, scale);
+                this.rightBox = new RotatingBox(this.width / 2, 0, scale);
+            }
+
+            update() {
+                this.angle += this.direction * this.speed;
+                if (this.angle >= Math.PI / 4 || this.angle <= -Math.PI / 4) {
+                    this.direction *= -1;
+                }
+
+                this.leftBox.update();
+                this.rightBox.update();
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                ctx.fillStyle = "red";
+                ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
+
+                this.leftBox.draw();
+                this.rightBox.draw();
+
+                ctx.restore();
+            }
+        }
+
+        class Triangle {
+            constructor(x, y, color, scale = 1) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.scale = scale;
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y);
+                ctx.lineTo(this.x - 20 * this.scale, this.y + 50 * this.scale);
+                ctx.lineTo(this.x + 20 * this.scale, this.y + 50 * this.scale);
+                ctx.closePath();
+                ctx.fill();
+            }
+        }
+
+        class Scene {
+            constructor() {
+                this.objects = [];
+            }
+
+            addObject(obj) {
+                this.objects.push(obj);
+            }
+
+            update() {
+                this.objects.forEach(obj => {
+                    if (obj.update) obj.update();
+                });
+            }
+
+            draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                this.objects.forEach(obj => obj.draw());
+            }
+        }
+
+        const scene = new Scene();
+
+        scene.addObject(new Triangle(150, 200, "purple", 1));
+        scene.addObject(new RotatingRectangle(150, 190, 100, 20, 0.005, 1));
+
+        scene.addObject(new Triangle(300, 250, "blue", 1.5));
+        scene.addObject(new RotatingRectangle(300, 240, 120, 20, -0.005, 1.5));
+
+        scene.addObject(new Triangle(450, 150, "green", 0.7));
+        scene.addObject(new RotatingRectangle(450, 140, 80, 20, 0.005, 0.7));
+
+        function animate() {
+            scene.update();
+            scene.draw();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

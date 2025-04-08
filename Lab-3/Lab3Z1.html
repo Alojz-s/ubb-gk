@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hierarchiczna Scena - Subroutinowy</title>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("canvas");
+        const ctx = canvas.getContext("2d");
+
+        let angle = 0;
+        let direction = 1;
+        let boxRotation = 0;
+
+        function drawScene() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            drawTriangle(150, 200, "purple", 1);
+            drawRotatingRectangle(150, 190, 100, 20, angle, 1);
+
+            drawTriangle(300, 250, "blue", 1.5);
+            drawRotatingRectangle(300, 240, 150, 30, -angle, 1.5);
+
+            drawTriangle(450, 150, "green", 0.7);
+            drawRotatingRectangle(450, 140, 60, 14, angle, 0.7);
+
+            angle += direction * 0.005;
+            if (angle >= Math.PI / 4 || angle <= -Math.PI / 4) {
+                direction *= -1;
+            }
+
+            boxRotation += 0.05;
+            requestAnimationFrame(drawScene);
+        }
+
+        function drawTriangle(x, y, color, scale = 1) {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x - 20 * scale, y + 50 * scale);
+            ctx.lineTo(x + 20 * scale, y + 50 * scale);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        function drawRotatingRectangle(x, y, width, height, rotation, scale = 1) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(rotation);
+            ctx.fillStyle = "red";
+            ctx.fillRect(-width / 2, -height / 2, width, height);
+
+            drawRotatingBox(-width / 2, 0, boxRotation, scale);
+            drawRotatingBox(width / 2, 0, boxRotation, scale);
+
+            ctx.restore();
+        }
+
+        function drawRotatingBox(x, y, rotation, scale = 1) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(rotation);
+            ctx.fillStyle = "black";
+
+            const sides = 14;
+            const radius = 15 * scale;
+            const angleStep = (2 * Math.PI) / sides;
+
+            ctx.beginPath();
+            for (let i = 0; i < sides; i++) {
+                const angle = i * angleStep;
+                const x = radius * Math.cos(angle);
+                const y = radius * Math.sin(angle);
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+
+        drawScene();
+    </script>
+</body>
+</html>

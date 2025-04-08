@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hierarchiczna Scena - Subroutinowy</title>
+    <title>Zadanie1</title>
 </head>
 <body>
     <canvas id="canvas" width="600" height="400"></canvas>
@@ -17,21 +17,16 @@
 
         function drawScene() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
             drawTriangle(150, 200, "purple", 1);
             drawRotatingRectangle(150, 190, 100, 20, angle, 1);
-
             drawTriangle(300, 250, "blue", 1.5);
             drawRotatingRectangle(300, 240, 150, 30, -angle, 1.5);
-
             drawTriangle(450, 150, "green", 0.7);
             drawRotatingRectangle(450, 140, 60, 14, angle, 0.7);
-
             angle += direction * 0.005;
             if (angle >= Math.PI / 4 || angle <= -Math.PI / 4) {
                 direction *= -1;
             }
-
             boxRotation += 0.05;
             requestAnimationFrame(drawScene);
         }

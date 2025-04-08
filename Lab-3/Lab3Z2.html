@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hierarchiczna Scena - Obiektowa</title>
+    <title>Lab3Z2</title>
 </head>
 <body>
     <canvas id="canvas" width="600" height="400"></canvas>
@@ -18,21 +18,16 @@
                 this.angle = 0;
                 this.scale = scale;
             }
-
             update() {
                 this.angle += 0.05;
             }
-
             draw() {
                 const sides = 14;
                 const radius = 15 * this.scale;
-
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.angle);
                 ctx.fillStyle = "black";
-
-                // Rysowanie dziewięciokąta
                 ctx.beginPath();
                 for (let i = 0; i < sides; i++) {
                     let angle = (i * 2 * Math.PI) / sides;
@@ -60,7 +55,6 @@
                 this.angle = 0;
                 this.speed = speed;
                 this.direction = 1;
-
                 this.leftBox = new RotatingBox(-this.width / 2, 0, scale);
                 this.rightBox = new RotatingBox(this.width / 2, 0, scale);
             }
@@ -70,21 +64,17 @@
                 if (this.angle >= Math.PI / 4 || this.angle <= -Math.PI / 4) {
                     this.direction *= -1;
                 }
-
                 this.leftBox.update();
                 this.rightBox.update();
             }
-
             draw() {
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.angle);
                 ctx.fillStyle = "red";
                 ctx.fillRect(-this.width / 2, -this.height / 2, this.width, this.height);
-
                 this.leftBox.draw();
                 this.rightBox.draw();
-
                 ctx.restore();
             }
         }

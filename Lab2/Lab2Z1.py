@@ -4,7 +4,7 @@ pygame.init()
 
 WIDTH, HEIGHT = 500, 500
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Lab3Ex2")
+pygame.display.set_caption("Lab2Z1")
 
 BLACK = (0, 0, 0)
 YELLOW = (255, 255, 0)

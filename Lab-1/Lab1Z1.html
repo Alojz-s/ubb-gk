@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Zadanie1</title>
+  <style>
+    canvas {
+      background-color: #aefcff;
+      display: block;
+      margin: 30px auto;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="300" height="300"></canvas>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+
+    function drawDiamond(x, y, width, height, color) {
+      ctx.beginPath();
+      ctx.moveTo(x, y - height / 2); // góra
+      ctx.lineTo(x + width / 1.5, y);  // prawa
+      ctx.lineTo(x, y + height / 2); // dół
+      ctx.lineTo(x - width / 1.5, y);  // lewa
+      ctx.closePath();
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    function drawEye(x, y) {
+      ctx.beginPath();
+      ctx.arc(x, y, 6, 0, Math.PI * 2);
+      ctx.fillStyle = "white";
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(x, y, 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = "black";
+      ctx.fill();
+    }
+
+
+    function drawSmileWithTooth(x, y) {
+      ctx.beginPath();
+      ctx.arc(x, y, 10, 0, Math.PI, false);
+      ctx.stroke();
+
+
+      ctx.fillStyle = "white";
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 1;
+      ctx.fillRect(x - 3, y + 10, 6, 5);
+      ctx.strokeRect(x - 3, y + 10, 6, 5);
+    }
+
+
+    drawDiamond(150, 150, 60, 100, "blue");
+    drawEye(140, 140);
+    drawEye(160, 140);
+    drawSmileWithTooth(150, 160);
+  </script>
+</body>
+</html>
